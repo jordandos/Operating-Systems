@@ -1,2 +1,2 @@
-signals: signal.c
-	gcc signal.c -o signalab 
+shell: shell.c
+	gcc -o shell shell.c -I.
