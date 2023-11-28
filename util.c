@@ -13,22 +13,26 @@
  * CAUTION: You need to free up the space that is allocated
  * by this function
  */
-Process *parse_file(FILE * f)
+ProcessType *parse_file(FILE * f, int *P_SIZE)
 {
-	size_t s = 0;
-	char *headers = NULL;
-	size_t line_len = 0;
-	//ignore the headers as we don't need them for storing data
-	line_len = getline(&headers, &line_len, f);
-	free(headers);
+	int i = 0;
 
-	//allocate process[] on heap and read all the data
-	Process *pptr = (Process *) malloc(P_SIZE * sizeof(Process));
+  ProcessType *pptr = (ProcessType *) malloc(sizeof(ProcessType));
+  
+  // count the number of processes
+  while (!feof(f)) {
+		fscanf(f, "%d %d %d %d %d %d\n", &(pptr->pid), &(pptr->bt), &(pptr->art), &(pptr->wt), &(pptr->tat), &(pptr->pri));
+    *P_SIZE += 1;
+	}
+
+  free(pptr);
+  fseek(f, 0, SEEK_SET);  // reset file pointer to beginning of fils
+  
+	// read all the data
+	pptr = (ProcessType *) calloc(*P_SIZE, sizeof(ProcessType));
 	while (!feof(f)) {
-		int t_pid, t_arrival_time, t_priority;
-		fscanf(f, "%d,%d,%d\n", &t_pid, &t_arrival_time, &t_priority);
-		process_ctr(&pptr[s], t_pid, t_arrival_time, t_priority);
-		s++;
+		fscanf(f, "%d %d %d %d %d %d\n", &(pptr[i].pid), &(pptr[i].bt), &(pptr[i].art), &(pptr[i].wt), &(pptr[i].tat), &(pptr[i].pri));
+		i++;
 	}
 
 	return pptr;

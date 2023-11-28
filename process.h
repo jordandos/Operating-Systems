@@ -1,22 +1,15 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#define P_SIZE 7		//size of the processes to read from file
+typedef struct Process { 
+    int pid; // Process ID 
+    int bt; // Burst Time 
+    int art; // Arrival Time 
+    int wt; // waiting time
+    int tat; // turnaround time
+    int pri; // priority
+}ProcessType; 
 
-/**
- * Abstraction of a process that needs to be sorted
- */
-typedef struct _process {
-	int pid;		/*Unique process identifier */
-	int arrival_time;	/*higher the arrival_time value, later it occurs in timeline */
-	int priority;		/*lower the priority number higher the priority */
-} Process;
-
-/**
- * Create a process
- * Pass in the process pointer that you want to be 
- * constructed with the pid, arrival time and priority
- */
-void process_ctr(Process * p, int pid, int arrival_time, int priority);
+typedef int (*Comparer) (const void *a, const void *b);
 
 #endif				// PROCESS_H

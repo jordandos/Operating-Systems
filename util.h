@@ -7,6 +7,6 @@
  * Utility function file
  */
 
-Process *parse_file(FILE *);
+ProcessType *parse_file(FILE *, int *);
 
 #endif				// UTIL_H
