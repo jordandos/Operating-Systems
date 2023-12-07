@@ -5,7 +5,7 @@
 #include<errno.h>
 
 #include "util.h"
-#include "process.h"
+#include "list.h"
 
 /**
  * Returns an array of process that are parsed from
@@ -13,27 +13,24 @@
  * CAUTION: You need to free up the space that is allocated
  * by this function
  */
-ProcessType *parse_file(FILE * f, int *P_SIZE)
+void parse_file(FILE * f, int input[][2], int *n, int *PARTITION_SIZE)
 {
-	int i = 0;
-
-  ProcessType *pptr = (ProcessType *) malloc(sizeof(ProcessType));
   
-  // count the number of processes
+  // get the initial partition sizeof
+  
+  fscanf(f,"%d\n", PARTITION_SIZE);
+  printf("PARTITION_SIZE = %d\n", *PARTITION_SIZE);
+  
   while (!feof(f)) {
-		fscanf(f, "%d %d %d %d %d %d\n", &(pptr->pid), &(pptr->bt), &(pptr->art), &(pptr->wt), &(pptr->tat), &(pptr->pri));
-    *P_SIZE += 1;
+		fscanf(f, "%d %d\n", &input[*n][0], &input[*n][1]);
+    /*
+    if(input[*n][0] != -99999 && input[*n][0] > 0)
+        printf("PID=%d ALLOCATE=%dbytes\n", input[*n][0], input[*n][1]);
+    else if (input[*n][0] != -99999 && input[*n][0] < 0)
+        printf("DEALLOCATED PROC = %d\n", abs(input[*n][0]));
+    else
+        printf("COALESCE\n");
+    */
+    *n += 1;
 	}
-
-  free(pptr);
-  fseek(f, 0, SEEK_SET);  // reset file pointer to beginning of fils
-  
-	// read all the data
-	pptr = (ProcessType *) calloc(*P_SIZE, sizeof(ProcessType));
-	while (!feof(f)) {
-		fscanf(f, "%d %d %d %d %d %d\n", &(pptr[i].pid), &(pptr[i].bt), &(pptr[i].art), &(pptr[i].wt), &(pptr[i].tat), &(pptr[i].pri));
-		i++;
-	}
-
-	return pptr;
 }
